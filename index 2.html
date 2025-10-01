@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Web Page - Tshegofatso Moloto</title>
+  <style>
+    /* =====================================================
+       Interactive Web Page
+       Author: Tshegofatso Moloto
+       Course: Software Engineering
+       Assignment: Interactive Web Pages with JavaScript
+       -----------------------------------------------------
+       🌟 About this Project:
+       This single-page web app shows my ability to use 
+       JavaScript for:
+       - Event handling (buttons, toggles, forms)
+       - DOM manipulation
+       - Creating interactive user-friendly features
+       - Custom form validation
+       ===================================================== */
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    button {
+      margin: 5px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #007bff;
+      color: white;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    input {
+      padding: 8px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 100%;
+    }
+
+    input:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.8em;
+    }
+
+    .dark-mode {
+      background: #222;
+      color: #f9f9f9;
+    }
+
+    .dark-mode button {
+      background: #555;
+      color: #fff;
+    }
+
+    .faq-answer {
+      display: none;
+      margin: 5px 0 15px;
+    }
+
+    .success {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Interactive Web Page 🎉</h1>
+    <button id="themeToggle">🌙 Toggle Dark Mode</button>
+  </header>
+
+  <main>
+    <!-- 🎮 INTERACTIVE COUNTER GAME -->
+    <section>
+      <h2>🎮 Button Counter Game</h2>
+      <p>This is a fun little feature! Each time you click the button, the number goes up.</p>
+      <button id="counterBtn">Click Me</button>
+      <p id="counterDisplay">Count: 0</p>
+    </section>
+
+    <!-- 📖 FAQ SECTION -->
+    <section>
+      <h2>📖 FAQ Section</h2>
+      <p>Click on a question to reveal the answer:</p>
+
+      <button class="faq-toggle">What is JavaScript?</button>
+      <p class="faq-answer">JavaScript is a programming language that makes web pages interactive.</p>
+      
+      <button class="faq-toggle">Why use JavaScript?</button>
+      <p class="faq-answer">Because it lets you add interactivity, animations, and dynamic features to your websites.</p>
+    </section>
+
+    <!-- 📋 SIGN-UP FORM WITH VALIDATION -->
+    <section>
+      <h2>📋 Sign Up Form</h2>
+      <p>This form checks your details before submitting. Try typing an invalid email or short password to see validation in action.</p>
+
+      <form id="signupForm">
+        <label>Name:
+          <input type="text" id="name" required>
+        </label>
+        <small class="error" id="nameError"></small>
+
+        <label>Email:
+          <input type="text" id="email" required>
+        </label>
+        <small class="error" id="emailError"></small>
+
+        <label>Password:
+          <input type="password" id="password" required>
+        </label>
+        <small class="error" id="passwordError"></small>
+
+        <button type="submit">Submit</button>
+        <p id="formMessage"></p>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    /* =====================================================
+       JavaScript Section
+       Purpose: Handle all interactivity and form validation
+       ===================================================== */
+
+    // 🌙 Dark Mode Toggle
+    const themeToggle = document.getElementById("themeToggle");
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+    });
+
+    // 🎮 Counter Game
+    let count = 0;
+    const counterBtn = document.getElementById("counterBtn");
+    const counterDisplay = document.getElementById("counterDisplay");
+
+    counterBtn.addEventListener("click", () => {
+      count++;
+      counterDisplay.textContent = "Count: " + count;
+    });
+
+    // 📖 FAQ - Show/Hide Answers
+    const faqToggles = document.querySelectorAll(".faq-toggle");
+    faqToggles.forEach((toggle) => {
+      toggle.addEventListener("click", () => {
+        const answer = toggle.nextElementSibling;
+        answer.style.display = (answer.style.display === "block") ? "none" : "block";
+      });
+    });
+
+    // 📋 Form Validation
+    const signupForm = document.getElementById("signupForm");
+    const nameField = document.getElementById("name");
+    const emailField = document.getElementById("email");
+    const passwordField = document.getElementById("password");
+
+    const nameError = document.getElementById("nameError");
+    const emailError = document.getElementById("emailError");
+    const passwordError = document.getElementById("passwordError");
+    const formMessage = document.getElementById("formMessage");
+
+    // Email Regex Pattern
+    const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+
+    signupForm.addEventListener("submit", (event) => {
+      event.preventDefault(); // prevent form from refreshing
+      let valid = true;
+
+      // ✅ Name Validation
+      if (nameField.value.trim().length < 3) {
+        nameError.textContent = "Name must be at least 3 characters.";
+        valid = false;
+      } else {
+        nameError.textContent = "";
+      }
+
+      // ✅ Email Validation
+      if (!emailField.value.match(emailPattern)) {
+        emailError.textContent = "Enter a valid email address.";
+        valid = false;
+      } else {
+        emailError.textContent = "";
+      }
+
+      // ✅ Password Validation
+      if (passwordField.value.length < 6) {
+        passwordError.textContent = "Password must be at least 6 characters.";
+        valid = false;
+      } else {
+        passwordError.textContent = "";
+      }
+
+      // 🎉 If all fields are valid
+      if (valid) {
+        formMessage.textContent = "✅ Form submitted successfully!";
+        formMessage.className = "success";
+        signupForm.reset();
+      } else {
+        formMessage.textContent = "❌ Please fix the errors above.";
+        formMessage.className = "error";
+      }
+    });
+  </script>
+</body>
+</html>
